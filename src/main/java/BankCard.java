@@ -12,10 +12,7 @@ abstract class BankCard {
 
     public abstract Boolean payFromCard(BigDecimal amountOfBill);
 
-    public BigDecimal getBalance(){
-        return balance;
+    public String getBalance(){
+        return balance.toString();
     }
-
-    public abstract String getAvailableFunds();
-
 }

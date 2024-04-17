@@ -1,6 +1,6 @@
 import java.math.BigDecimal;
 
-public class CreditCardWithAdditionalSum extends CreditCard{
+public final class CreditCardWithAdditionalSum extends CreditCard{
     final private BigDecimal percentForTopUp;
     public CreditCardWithAdditionalSum(BigDecimal initialBalance, BigDecimal initialCreditBalance, BigDecimal percentForTopUp){
         super(initialBalance, initialCreditBalance);
@@ -10,13 +10,13 @@ public class CreditCardWithAdditionalSum extends CreditCard{
     @Override
     public void topUpBalance(BigDecimal amount){
     amount = amount.add(amount.multiply(percentForTopUp.divide(BigDecimal.valueOf(100))));
-        if (!(CurrentCreditBalance.equals(MaxCreditBalance))){
-            if(amount.compareTo(MaxCreditBalance.subtract(CurrentCreditBalance)) >= 0){
-                amount = amount.subtract(CurrentCreditBalance);
-                CurrentCreditBalance = MaxCreditBalance;
+        if (!(currentCreditBalance.equals(maxCreditBalance))){
+            if(amount.compareTo(maxCreditBalance.subtract(currentCreditBalance)) >= 0){
+                amount = amount.subtract(currentCreditBalance);
+                currentCreditBalance = maxCreditBalance;
                 balance = balance.add(amount);
             } else{
-                CurrentCreditBalance = CurrentCreditBalance.add(amount);
+                currentCreditBalance = currentCreditBalance.add(amount);
             }
         }
         else this.balance = balance.add(amount);

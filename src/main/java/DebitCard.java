@@ -15,9 +15,8 @@ public class DebitCard extends BankCard{
         }
         else return false;
     }
-
     @Override
-    public String getAvailableFunds(){
+    public String getBalance(){
         return "Current balance: " + balance + "\n";
     }
 }

@@ -1,24 +1,26 @@
 import java.math.BigDecimal;
 
 public class CreditCard extends BankCard {
-    protected final   BigDecimal MaxCreditBalance;
-    protected         BigDecimal CurrentCreditBalance = BigDecimal.ZERO;
+    protected final   BigDecimal maxCreditBalance;
+    protected         BigDecimal currentCreditBalance;
 
     public CreditCard(BigDecimal initialBalance, BigDecimal initialCreditBalance){
         super(initialBalance);
-        this.MaxCreditBalance = initialCreditBalance;
+        this.maxCreditBalance = initialCreditBalance;
+        this.currentCreditBalance = maxCreditBalance;
     }
 
+    //todo стоит изменить логику, можно обойтись одним полем кредитного баланса, а реальный баланс может опускаться ниже нуля, тогда второе поле избыточно
     @Override
     public void topUpBalance(BigDecimal amount) {
-        if (CurrentCreditBalance.compareTo(MaxCreditBalance) < 0) {
-            BigDecimal remainingCredit = MaxCreditBalance.subtract(CurrentCreditBalance);
+        if (currentCreditBalance.compareTo(maxCreditBalance) < 0) {
+            BigDecimal remainingCredit = maxCreditBalance.subtract(currentCreditBalance);
             if (amount.compareTo(remainingCredit) >= 0) {
                 BigDecimal excessAmount = amount.subtract(remainingCredit);
-                CurrentCreditBalance = MaxCreditBalance;
+                currentCreditBalance = maxCreditBalance;
                 balance = balance.add(excessAmount);
             } else {
-                CurrentCreditBalance = CurrentCreditBalance.add(amount);
+                currentCreditBalance = currentCreditBalance.add(amount);
             }
         } else {
             balance = balance.add(amount);
@@ -26,11 +28,11 @@ public class CreditCard extends BankCard {
     }
     @Override
     public Boolean payFromCard(BigDecimal amount){
-            if ((CurrentCreditBalance.add(super.balance)).compareTo(amount) >= 0){
+            if ((currentCreditBalance.add(super.balance)).compareTo(amount) >= 0){
                     if ((amount.compareTo(balance)) >= 0){
                         amount = amount.subtract(balance);
                         balance = BigDecimal.ZERO;
-                        this.CurrentCreditBalance = CurrentCreditBalance.subtract(amount);
+                        this.currentCreditBalance = currentCreditBalance.subtract(amount);
                     }
                         else{
                             this.balance = balance.subtract(amount);
@@ -39,10 +41,9 @@ public class CreditCard extends BankCard {
             }
             else return false;
     }
-
-    @Override
-    public String getAvailableFunds(){
-        return "Own funds: " + super.balance + "\n"
-                + "Credit balance: " + this.CurrentCreditBalance + "\n";
+    
+    public String getBalance(){
+        return "Own funds: " + (super.balance.add(this.currentCreditBalance)) + "\n";
+                
     }
 }

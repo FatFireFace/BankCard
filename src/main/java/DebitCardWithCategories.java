@@ -2,11 +2,15 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
 
-final public class DebitCardWithCategories extends DebitCardWithCashback{
+public final class DebitCardWithCategories extends DebitCard{
     private final HashSet<String> categories;
+    private final BigDecimal cashbackPercent;
+
+    //todo можно использовать мапу и реализовать разные проценты под категории
     public DebitCardWithCategories(BigDecimal initialBalance, BigDecimal cashbackPercent, String[] categories) {
-        super(initialBalance, cashbackPercent, BigDecimal.ZERO);
+        super(initialBalance);
         this.categories = new HashSet<>(Arrays.asList(categories));
+        this.cashbackPercent = cashbackPercent;
     }
 
 
@@ -22,7 +26,7 @@ final public class DebitCardWithCategories extends DebitCardWithCashback{
     }
 
     @Override
-    public String getAvailableFunds(){
+    public String getBalance(){
         return "Own funds: " + super.balance + "\n"
                 + "Cashback categories: "+ String.join(" ", categories) + "\n";
     }
